@@ -165,7 +165,7 @@ export default function Home() {
     pollRef.current = setInterval(async () => {
       const r = await fetchInbox({ id: idToPoll });
       if (r.messages && r.messages.length > 0) stopPolling();
-    }, 8000);
+    }, 5000);
   };
 
   const stopPolling = () => {
@@ -211,7 +211,6 @@ export default function Home() {
             <div className="goth-panel">
               <div>
                 <h2 className="panel-title">Create temporary email</h2>
-                <p className="panel-sub">Alamat sementara untuk testing / signup / verifikasi.</p>
               </div>
 
               <div>
@@ -241,7 +240,7 @@ export default function Home() {
                   </button>
 
                   <button className={`btn goth-ghost ${polling ? 'active' : ''}`} onClick={() => polling ? stopPolling() : startPolling(result.id)}>
-                    {polling ? 'Stop Polling' : 'Start Polling (8s)'}
+                    {polling ? 'Stop Polling' : 'Start Polling (5s)'}
                   </button>
 
                   <button className="btn goth-outline" onClick={() => { navigator.clipboard?.writeText(result.email); alert('Email copied') }}>
