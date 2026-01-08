@@ -351,6 +351,7 @@ export default function Home() {
               <ul>
                 <li>Gunakan polling untuk auto-check setiap 5 detik.</li>
                 <li>Gunakan tombol "Check Inbox" untuk manual check.</li>
+                <li>Reset history dengan tombol "Reset".</li>
               </ul>
             </div>
           </aside>
