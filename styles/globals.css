@@ -768,3 +768,20 @@ body::before {
 .history-item.expired .muted {
   color: #666;
 }
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed !important;
+  filter: grayscale(40%);
+}
+
+.btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.btn.cooldown {
+  background: linear-gradient(135deg, #550000, #220000);
+  border: 1px solid rgba(139, 0, 0, 0.4);
+  color: #bbb;
+}

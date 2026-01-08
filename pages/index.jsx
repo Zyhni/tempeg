@@ -1,11 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-
-/**
- * pages/index.jsx - Tempeg (Gothic red-black theme)
- * Perubahan satu-satunya:
- * + Penambahan mekanisme caching per device dengan deviceID tetap
- */
-
 function formatDate(iso) {
   if (!iso) return "-";
   const d = new Date(iso);
@@ -14,14 +7,41 @@ function formatDate(iso) {
 }
 
 export default function Home() {
+  const sanitize = (str) => {
+    if (!str || typeof str !== "string") return "";
+    return str
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  };
+
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
   const [inbox, setInbox] = useState(null);
+  const [cooldown, setCooldown] = useState(0);
   const [loadingGen, setLoadingGen] = useState(false);
   const [loadingInbox, setLoadingInbox] = useState(false);
   const [polling, setPolling] = useState(false);
   const pollRef = useRef(null);
+  const handleGenerate = async () => {
+    if (cooldown > 0) return;
 
+    setCooldown(10);
+
+    const interval = setInterval(() => {
+      setCooldown(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    await generateEmail();
+  };
+  
   // ---- NEW: device ID ----
   const [deviceID, setDeviceID] = useState(null);
 
@@ -214,9 +234,9 @@ export default function Home() {
               </div>
 
               <div>
-                <button className="btn goth-primary" onClick={generateEmail} disabled={loadingGen}>
-                  {loadingGen ? <span className="goth-spinner" /> : '+'}
-                  <span className="btn-label">{loadingGen ? 'Generating...' : 'Generate Email'}</span>
+                <button
+                  className="btn goth-primary" disabled={cooldown > 0} onClick={handleGenerate}>
+                  {cooldown > 0 ? `Waiting ${cooldown}s` : "Generate Email"}
                 </button>
               </div>
             </div>
@@ -225,7 +245,7 @@ export default function Home() {
               <div className="goth-card result">
                 <div className="result-info">
                   <div className="label">Email</div>
-                  <div className="val break">{result.email}</div>
+                  <div className="val break">{sanitize(result.email)}</div>
 
                   <div className="label mt">ID</div>
                   <div className="val mono break">{result.id}</div>
@@ -268,12 +288,12 @@ export default function Home() {
                         <article className="message" key={i}>
                           <div className="message-head">
                             <div>
-                              <div className="msg-from">{m.from}</div>
-                              <div className="msg-sub">{m.subject}</div>
+                              <div className="msg-from">{sanitize(m.from)}</div>
+                             <div className="msg-sub">{sanitize(m.subject)}</div>
                             </div>
                             <div className="msg-to mono">{m.to}</div>
                           </div>
-                          <div className="msg-body">{m.body}</div>
+                         <div className="msg-body">{sanitize(m.body)}</div>
                           {m.downloadUrl && (
                             <a className="goth-link" href={m.downloadUrl} target="_blank" rel="noreferrer">Download attachment</a>
                           )}
@@ -302,8 +322,8 @@ export default function Home() {
                 return (
                     <div key={h.id + "-" + idx} className={`history-item ${expired ? 'expired' : ''}`}>
                     <div className="h-left">
-                        <div className="h-email break">{h.email}</div>
-                        <div className="h-id mono">{h.id}</div>
+                        <div className="h-email break">{sanitize(h.email)}</div>
+                        <div className="h-id mono">{sanitize(h.id)}</div>
                         <div className={`muted small ${expired ? 'expired-text' : ''}`}>
                         Expires: {formatDate(h.expiresAt)}
                         </div>
