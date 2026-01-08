@@ -724,14 +724,47 @@ body::before {
 }
 
 /* Disabled States */
-.btn:disabled, .btn.disabled {
-  opacity: 0.5;
+.btn.disabled {
+  background: rgba(220, 20, 60, 0.2) !important;
+  color: var(--crimson) !important;
+  border: 1px solid rgba(220, 20, 60, 0.4) !important;
   cursor: not-allowed;
-  pointer-events: none;
+  position: relative;
+  opacity: 1 !important;
+}
+
+.btn.disabled::after {
+
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+.val.expired {
+  color: var(--crimson) !important;
+  font-weight: 600 !important;
+  background: rgba(220, 20, 60, 0.1) !important;
+  border: 1px solid rgba(220, 20, 60, 0.3) !important;
 }
 
 /* Focus States */
 .btn:focus, input:focus, textarea:focus, select:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.3);
+}
+
+.history-item.expired {
+  opacity: 0.8;
+  background: linear-gradient(145deg, rgba(30, 0, 0, 0.9), rgba(20, 0, 0, 0.9));
+  border: 1px solid rgba(220, 20, 60, 0.5);
+  position: relative;
+}
+
+.history-item.expired .h-email {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.history-item.expired .h-id,
+.history-item.expired .muted {
+  color: #666;
 }

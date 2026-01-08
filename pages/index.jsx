@@ -231,7 +231,9 @@ export default function Home() {
                   <div className="val mono break">{result.id}</div>
 
                   <div className="label mt">Expires</div>
-                  <div className="val danger">{formatDate(result.expiresAt)}</div>
+                    <div className={`val ${isExpired(result.expiresAt) ? 'expired' : 'danger'}`}>
+                        {formatDate(result.expiresAt)}
+                    </div>
                 </div>
 
                 <div className="result-controls">
@@ -295,28 +297,39 @@ export default function Home() {
 
               <div className="history-list">
                 {history.length === 0 && <div className="empty">Belum ada history.</div>}
-                {history.map((h, idx) => (
-                  <div key={h.id + "-" + idx} className="history-item">
+                {history.map((h, idx) => {
+                const expired = isExpired(h.expiresAt);
+                return (
+                    <div key={h.id + "-" + idx} className={`history-item ${expired ? 'expired' : ''}`}>
                     <div className="h-left">
-                      <div className="h-email break">{h.email}</div>
-                      <div className="h-id mono">{h.id}</div>
-                      <div className="muted small">Expires: {formatDate(h.expiresAt)}</div>
+                        <div className="h-email break">{h.email}</div>
+                        <div className="h-id mono">{h.id}</div>
+                        <div className={`muted small ${expired ? 'expired-text' : ''}`}>
+                        Expires: {formatDate(h.expiresAt)}
+                        </div>
                     </div>
                     <div className="h-actions">
-                      <button className={`btn small ${isExpired(h.expiresAt) ? 'disabled' : 'goth-success'}`} onClick={() => handleCheckInboxHistory(h)} disabled={isExpired(h.expiresAt)}>
-                        {isExpired(h.expiresAt) ? 'Expired' : 'Check Inbox'}
-                      </button>
-                      <button className="btn small goth-outline" onClick={() => { navigator.clipboard?.writeText(h.email); alert('Copied') }}>Copy</button>
+                        <button 
+                        className={`btn small ${expired ? 'disabled' : 'goth-success'}`} 
+                        onClick={() => handleCheckInboxHistory(h)} 
+                        disabled={expired}
+                        >
+                        {expired ? 'Expired' : 'Check Inbox'}
+                        </button>
+                        <button className="btn small goth-outline" onClick={() => { navigator.clipboard?.writeText(h.email); alert('Copied') }}>
+                        Copy
+                        </button>
                     </div>
-                  </div>
-                ))}
+                    </div>
+                );
+                })}
               </div>
             </div>
 
             <div className="goth-card tips">
               <h4>Tips</h4>
               <ul>
-                <li>Gunakan polling untuk auto-check setiap 8 detik.</li>
+                <li>Gunakan polling untuk auto-check setiap 5 detik.</li>
                 <li>Gunakan tombol "Check Inbox" untuk manual check.</li>
               </ul>
             </div>
