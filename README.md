@@ -20,13 +20,13 @@ Aplikasi ini membuat alamat email sementara, menampilkan inbox (menggunakan API 
 ```js
 tempeg/
 ├─ pages/
-│ ├─ index.jsx # UI + logic (generate, inbox, cooldown, history)
+│ ├─ index.jsx
 │ └─ api/
-│ ├─ tempmail.js # server proxy untuk generate tempmail
-│ └─ inbox.js # server proxy untuk mailbox
+│ ├─ tempmail.js
+│ └─ inbox.js
 ├─ public/
 ├─ styles/
-│ └─ globals.css # custom gothic CSS
+│ └─ globals.css
 ├─ package.json
 ├─ next.config.js
 └─ README.md
